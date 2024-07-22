@@ -128,7 +128,7 @@ if __name__ == '__main__':
     messages = email_client.get_email_content(message_IDs)
     
     # print out a few to test the connection using func from email_utils
-    email_test_print(messages, number = 3, lines = 50)
+    email_test_print(messages, number = 20, lines = 80)
     
     # disconnect... bye bye
     email_client.disconnect()
