@@ -9,6 +9,7 @@ class EmailClient:
     """
     Class to handle email client operations.
     """
+
     def __init__(self, address, host, user, password):
         """
         Initialize the EmailClient with the necessary credentials and server information.
@@ -117,7 +118,7 @@ class EmailClient:
 # ======================================================================
 
 if __name__ == '__main__':
-    print('email_agent/client.py running ')
+    print(f"email_agent/client.py running with email address {EMAIL_ADDRESS}")
     # setup email client and login
     email_client = EmailClient(EMAIL_ADDRESS, EMAIL_HOST, EMAIL_USER, EMAIL_PASSWORD)
     email_client.connect()
@@ -126,9 +127,9 @@ if __name__ == '__main__':
     email_client.select_folder('INBOX')
     message_IDs = email_client.get_all_email_IDs()
     messages = email_client.get_email_content(message_IDs)
-    
+
     # print out a few to test the connection using func from email_utils
     email_test_print(messages, number = 20, lines = 80)
-    
+
     # disconnect... bye bye
     email_client.disconnect()
