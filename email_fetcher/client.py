@@ -87,7 +87,7 @@ class EmailClient:
         self._ensure_connection()
         try:
             if self.connection:
-                return self.connection.fetch(email_id, ['ENVELOPE', 'BODY.PEEK[TEXT]'])
+                return self.connection.fetch(email_id, ['ENVELOPE', 'BODY.PEEK[]'])
             else:
                 print(f"There is no connection to {self.host} to get email content from")
                 return []
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     messages = email_client.get_email_content(message_IDs)
     
     # print out a few to test the connection using func from email_utils
-    email_test_print(messages, number = 2, lines = 50)
+    email_test_print(messages, number = 3, lines = 50)
     
     # disconnect... bye bye
     email_client.disconnect()
