@@ -19,7 +19,6 @@ email_messages = email_2_dict(messages)
 
 # Concatenate all the email content into a single string for classification
 # email_doc = create_context(email_messages)
-
 # ====== FIRE UP THE LLM ========
 
 # Create an LLM connection to the LLM service (e.g., OpenAI)
