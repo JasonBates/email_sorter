@@ -11,13 +11,11 @@ Usage:
 """
 
 import email.parser
-from itertools import islice
 import email
 from html import unescape
 from email.header import decode_header
 from email.parser import BytesParser
 import chardet
-from typing import Union
 
 def decode_rfc2047(byte_like_subject_line):
     """
@@ -51,31 +49,28 @@ def decode_rfc2047(byte_like_subject_line):
     decoded_subject_line = ''.join(decoded_string_parts)
     return decoded_subject_line
 
-def email_2_dict(messages, number=10, lines=10):
+def email_2_dict(messages):
     """
     Print a summary of email messages.
 
     Args:
         messages (dict): A dictionary containing email messages, where the keys are message IDs
                          and the values are dictionaries containing message data.
-        number (int, optional): The maximum number of messages to return. Defaults to 10.
-        lines (int, optional): The number of lines from the message body to print. Defaults to 10.
-
     Raises:
         None
     
     Returns:
-        None
+        A dictionary of email messages and metadata: subject, from, date, message
     """
-    
+
     email_dict = {}
-    
-    for msg_id, data in islice(messages.items(), number):
+
+    for msg_id, data in messages.items():
         # get the subject and from field from the ENVELOPE
         envelope = data[b'ENVELOPE']
         date_received = envelope.date if envelope.date else ''
         from_field = f"{envelope.sender[0]}" if envelope.sender else ''
-        # decode tricky subject line with encoding of emojis and the like
+        # decode tricky subject line with encoding of text and emojis into tuples?!?!
         subject = decode_rfc2047(envelope.subject)
 
         # get the body of the message and decode it from BODY.PEEK[]
@@ -117,20 +112,11 @@ def email_2_dict(messages, number=10, lines=10):
                 else:
                     body_text = 'Unable to decode message body'
 
-        body_lines = body_text.split('\n')
-        first_x_lines = '\n'.join(body_lines[:lines])
-        
         email_dict[msg_id] = {
             'subject': subject,
             'from': from_field,
             'date': date_received,
-            'first_x_lines': first_x_lines
+            'body': body_text
         }
 
-        # print("=======================================================")
-        # print(f"{msg_id} \nSubject: {subject} \nFrom: {from_field} \nDate: {date_received}")
-        # print(f"First {lines} lines of text content:\n")
-        # print("-------------------------------------------------------")
-        # print(f" {first_x_lines} \n")
-    
     return email_dict
