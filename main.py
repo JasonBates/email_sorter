@@ -3,6 +3,8 @@ from email_fetcher.email_utils import email_2_dict
 from email_fetcher.client import EmailClient
 import itertools
 
+# ======= GET THE EMAILS =========
+
 # setup email client and login
 email_client = EmailClient(EMAIL_ADDRESS, EMAIL_HOST, EMAIL_USER, EMAIL_PASSWORD)
 email_client.connect()
@@ -15,19 +17,30 @@ messages = email_client.get_email_content(message_IDs)
 # extract messages to a dictionary I can iterate over
 email_messages = email_2_dict(messages)
 
+# Concatenate all the email content into a single string for classification
+# email_doc = create_context(email_messages)
+
+# ====== FIRE UP THE LLM ========
+
 # Create an LLM connection to the LLM service (e.g., OpenAI)
-llm_connection = LLMservice(OPEN_API_KEY)
+# llm = LLM(api_key="OPEN_API_KEY")
+# llm.connect()
 
 # send email messages to the LLM service for classification
-# classified_emails = classify_emails(llm_connection, email_messages)
+# prompt = "Classify the following emails into categories:"
+# email_filing_instructions = llm_connection.classify_emails(email_doc, prompt)
+
+# ======= MOVE THE EMAILS TO THE RIGHT FOLDERS ========
 
 # move the emails with message ID to inbox with label provided by LLM
-# for classified_email in classified_emails:
-#     email_client.move_email(classified_email['message_id'], 'INBOX', classified_email['label'])
+# for message_id, target_folder in email_filing_instructions.items():
+#     email_client.move_email(message_id, 'INBOX', target_folder)
+
+# ======= CREATE A SUMMARY OF WHAT HAS MOVED WHERE ==========
 
 
 # print messages from dictionary to test
-for message_ID, message_metadata in itertools.islice(email_messages.items(), 3):
+for message_ID, message_metadata in itertools.islice(email_messages.items(), 1):
     print(message_ID)
     print("From:", message_metadata['from'])
     print("Subject:", message_metadata['subject'])
