@@ -117,22 +117,3 @@ class EmailClient:
                 print(f"failed to logout from email server {self.host} with error {e}")
             finally:
                 self.connection = None
-                
-# ======================================================================
-
-if __name__ == '__main__':
-    print(f"email_agent/client.py running with email address {EMAIL_ADDRESS}")
-    # setup email client and login
-    email_client = EmailClient(EMAIL_ADDRESS, EMAIL_HOST, EMAIL_USER, EMAIL_PASSWORD)
-    email_client.connect()
-
-    # get the list of emails from the INBOX folder
-    email_client.select_folder('INBOX')
-    message_IDs = email_client.get_all_email_IDs()
-    messages = email_client.get_email_content(message_IDs)
-
-    # print out a few to test the connection using func from email_utils
-    email_test_print(messages, number = 50, lines = None)
-
-    # disconnect... bye bye
-    email_client.disconnect()

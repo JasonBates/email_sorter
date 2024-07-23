@@ -24,8 +24,10 @@
 
 11. DONE: fixed email_utils.py print emails to fix multipart messages .. caused by BODY.PEEK[TEXT]
 
+12. DONE: Fixed problematic subject lines, crazy tuples of emoji !? 🤷
+
 ======
 
-12. TODO: rather than printing out the email messages, create a dictionary that contains the email. envelope details, message ID, message body, time / date, etc. .. and test that with messages
+12. TODO: rather than printing out the email messages, create and return a dictionary that contains the email. envelope details, message ID, message body, time / date, etc. .. and test that with messages called from main.py
 
 12. TODO: move the smart bit from printing the email to a separate function so that I can start on the LLM part of the codebase
