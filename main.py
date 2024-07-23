@@ -32,9 +32,10 @@ classification_prompt = """
 # Purpose
 
 You are an email classification assistant. Given a list of emails please classify these emails into the following
-groups according to the criteria provided:
+groups according to the criteria provided. Read the emails and think about the intention of the sender. What are they trying
+to do?
 
-## Newsletters
+## Newsletters - designed to inform me
 - Emails that are regular updates from a source about topics such as technology, finance, health, or lifestyle.
 - They are often a sequence of unrelated stories of the week about a particular theme 
 - Those stories often have headlines and then a news story
@@ -47,37 +48,37 @@ groups according to the criteria provided:
     - morning brew 
     ...and others
 
-## Personal
+## Personal - personal communications with friends and colleagues
 - These tend to be text notes that address me by name and are asking a question, letting me know about something
 confirming a meeting, or sending me a file or information that's important.
 - they tend to be from individuals rather than companies
-they don't tend to be sales messages or have lots of graphics, 
+- they don't tend to be sales messages or have lots of graphics, 
 
-## Adverts
-- They are trying to sell me something
+## Adverts - trying to get me to buy a product, service, or ticket
+- They are trying to sell me something with language like 'Buy now', 'book now', or 'special offer'
 - They are often trying to get me to buy a ticket to an event by telling me about the event
-- They often mention discounts if I act quickly
-- They use sales language to try to get me to buy a ticket, product, or service
+- They often mention discounts especially if I act quickly
+- They use typical sales language 
 - They are often from companies rather than individuals
 - They are often HTML with graphics and images of the products they are selling
 
-## Orders and receipts
+## Orders and receipts - confirming a purchase I've already made
 - They refer to something I've purchased or an event I have already booked
 - Often they confirm the order or charge or delivery of the item
 - They are likely to include the price of the item or service I bought
 
 # Output
-- create a list of email subject lines for each grouping title
+- create a list of email subject lines for each grouping title based on the intent of the sender
 - Respond in json format but don't put '/n' in the answer
 
 """
-
-result = llm.get_response_with_context_json(classification_prompt,email_doc)
-pprint.pprint(result)
-
 # send email messages to the LLM service for classification
-# prompt = "Classify the following emails into categories:"
-# email_filing_instructions = llm_connection.classify_emails(email_doc, prompt)
+result = llm.get_response_with_context_json(classification_prompt, email_doc)
+
+email_filing_instructions = json.loads(result)
+pprint.pprint(email_filing_instructions)
+
+# SUCCESS!!! 
 
 # ======= MOVE THE EMAILS TO THE RIGHT FOLDERS ========
 
