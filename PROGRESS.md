@@ -26,6 +26,8 @@
 
 12. DONE: Fixed problematic subject lines, crazy tuples of emoji !? 🤷
 
+13. DONE: Fixed py linting issues ... with # type: ignore which feels a bit dirty, but works. Look more into that
+
 ======
 
 12. TODO: rather than printing out the email messages, create and return a dictionary that contains the email. envelope details, message ID, message body, time / date, etc. .. and test that with messages called from main.py
