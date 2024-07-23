@@ -13,8 +13,63 @@ Usage:
 from itertools import islice
 import email
 from html import unescape
+from email.header import decode_header
 from email.parser import BytesParser
 import chardet
+
+def decode_rfc2047(byte_like_subjectline):
+    """
+    Decode a Subject line encoded using RFC 2047.
+
+    Args:
+        byte_like_subjectline (bytes): The byte-like encoded Subject line.
+
+    Returns:
+        str: The decoded Subject line.
+    """
+    # Decode the byte-like object to a string
+    encoded_text = byte_like_subjectline.decode('utf-8')
+    # Decode the encoded header
+    decoded_parts = decode_header(encoded_text)
+    # Initialize an empty list to hold decoded strings
+    decoded_string_parts = []
+    # Process each part of the decoded header
+    for part, charset in decoded_parts:
+        if isinstance(part, bytes):
+            if charset is not None:
+                # Decode byte string to a regular string using the specified charset
+                decoded_string_parts.append(part.decode(charset))
+            else:
+                # Decode byte string using utf-8 as default charset
+                decoded_string_parts.append(part.decode('utf-8'))
+        else:
+            # Part is already a string (not bytes)
+            decoded_string_parts.append(part)
+    # Join all parts into a single string
+    decoded_subject_line = ''.join(decoded_string_parts)
+    return decoded_subject_line
+    
+    # Decode the byte-like object to a string
+    encoded_text = byte_like_subjectline.decode('utf-8')
+    # Decode the encoded header
+    decoded_parts = decode_header(encoded_text)
+    # Initialize an empty list to hold decoded strings
+    decoded_string_parts = []
+    # Process each part of the decoded header
+    for part, charset in decoded_parts:
+        if isinstance(part, bytes):
+            if charset is not None:
+                # Decode byte string to a regular string using the specified charset
+                decoded_string_parts.append(part.decode(charset))
+            else:
+                # Decode byte string using utf-8 as default charset
+                decoded_string_parts.append(part.decode('utf-8'))
+        else:
+            # Part is already a string (not bytes)
+            decoded_string_parts.append(part)
+    # Join all parts into a single string
+    decoded_subject_line = ''.join(decoded_string_parts)
+    return decoded_subject_line
 
 def email_test_print(messages, number=10, lines=10):
     """
@@ -35,18 +90,17 @@ def email_test_print(messages, number=10, lines=10):
     for msg_id, data in islice(messages.items(), number):
         # get the subject and from field from the ENVELOPE
         envelope = data[b'ENVELOPE']
-        subject = envelope.subject.decode() if envelope.subject else ''
+        date_received = envelope.date if envelope.date else ''
         from_field = f"{envelope.sender[0]}" if envelope.sender else ''
-
+        # decode tricky subject line with encoding of emojis and the like
+        subject = decode_rfc2047(envelope.subject)
+        
         # get the body of the message and decode it from BODY.PEEK[]
         body_bytes = data[b'BODY[]']
         message = BytesParser().parsebytes(body_bytes)
         body_text = ''
 
-        # testing the output of the message get request
-        # print("content type", message.get_content_type())
-        # print("boundary string", message.get_boundary())
-
+        # Go through multipart email and pull out the text with HTML as a fallback
         if message.is_multipart() or 'multipart/' in message.get_content_type():
             # print("Message is multipart")
             for part in message.walk():
@@ -83,8 +137,10 @@ def email_test_print(messages, number=10, lines=10):
         body_lines = body_text.split('\n')
         first_x_lines = '\n'.join(body_lines[:lines])
 
-        print("=======================================================")
-        print("=======================================================")
-        print("=======================================================")
-        print(f"{msg_id}, subject: {subject}, \n from: {from_field} \n")
+        # print("=======================================================")
+        # print("=======================================================")
+        # print("=======================================================")
+        print(f"{msg_id} \nSubject: {subject} \nFrom: {from_field} \nDate: {date_received}")
         print(f"First {lines} lines of text content:\n{first_x_lines}\n")
+ 
+
