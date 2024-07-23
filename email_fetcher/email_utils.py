@@ -80,13 +80,10 @@ def email_2_dict(messages):
 
         # Go through multipart email and pull out the text with HTML as a fallback
         if message.is_multipart() or 'multipart/' in message.get_content_type():
-            # print("Message is multipart")
             for part in message.walk():
                 if part.get_content_type() == 'text/plain':
-                    # print(f"Processing text/plain")
                     try:
                         body_text = part.get_payload(decode=True).decode() # type: ignore
-                        # print("Found text/plain part, setting body_text")
                     except UnicodeDecodeError:
                         body_text = 'Unable to decode message body'
                         break
@@ -94,14 +91,12 @@ def email_2_dict(messages):
                     try:
                         body_html = part.get_payload(decode=True).decode() # type: ignore[attr-defined]
                         body_text = unescape(email.parser.Parser().parsestr(body_html).get_payload()) # type: ignore
-                        # print("Found text/html part, setting body_text")
                     except UnicodeDecodeError:
                         body_text = 'Unable to decode message body'
                         break
         else:
             try:
                 body_text = message.get_payload(decode=True).decode() # type: ignore
-                # print('just text... ')
             except UnicodeDecodeError:
                 result = chardet.detect(message.get_payload(decode=True)) # type: ignore
                 if result['encoding'] is not None:
