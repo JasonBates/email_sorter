@@ -16,6 +16,7 @@ from html import unescape
 from email.header import decode_header
 from email.parser import BytesParser
 import chardet
+from datetime import datetime
 
 def decode_rfc2047(byte_like_subject_line):
     """
@@ -110,7 +111,7 @@ def email_2_dict(messages):
         email_dict[msg_id] = {
             'subject': subject,
             'from': from_field,
-            'date': date_received,
+            'date': date_received.strftime('%Y-%m-%d %H:%M:%S'),
             'body': body_text
         }
 
