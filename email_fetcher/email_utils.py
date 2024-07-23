@@ -51,7 +51,7 @@ def decode_rfc2047(byte_like_subject_line):
     decoded_subject_line = ''.join(decoded_string_parts)
     return decoded_subject_line
 
-def email_test_print(messages, number=10, lines=10):
+def email_2_dict(messages, number=10, lines=10):
     """
     Print a summary of email messages.
 
@@ -67,6 +67,9 @@ def email_test_print(messages, number=10, lines=10):
     Returns:
         None
     """
+    
+    email_dict = {}
+    
     for msg_id, data in islice(messages.items(), number):
         # get the subject and from field from the ENVELOPE
         envelope = data[b'ENVELOPE']
@@ -117,10 +120,17 @@ def email_test_print(messages, number=10, lines=10):
         body_lines = body_text.split('\n')
         first_x_lines = '\n'.join(body_lines[:lines])
         
-        # this is where a dictionary needs to be returned and the printing stuff happens in main.py
+        email_dict[msg_id] = {
+            'subject': subject,
+            'from': from_field,
+            'date': date_received,
+            'first_x_lines': first_x_lines
+        }
 
-        print("=======================================================")
-        print(f"{msg_id} \nSubject: {subject} \nFrom: {from_field} \nDate: {date_received}")
-        print(f"First {lines} lines of text content:\n")
-        print("-------------------------------------------------------")
-        print(f" {first_x_lines} \n")
+        # print("=======================================================")
+        # print(f"{msg_id} \nSubject: {subject} \nFrom: {from_field} \nDate: {date_received}")
+        # print(f"First {lines} lines of text content:\n")
+        # print("-------------------------------------------------------")
+        # print(f" {first_x_lines} \n")
+    
+    return email_dict
