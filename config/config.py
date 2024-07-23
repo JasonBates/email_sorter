@@ -12,4 +12,3 @@ EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
 # OpenAI API key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-print('Credentials loaded from .env') # for testing

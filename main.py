@@ -1,4 +1,4 @@
-from config.config import EMAIL_HOST, EMAIL_PASSWORD, EMAIL_USER, EMAIL_ADDRESS
+from config.config import EMAIL_HOST, EMAIL_PASSWORD, EMAIL_USER, EMAIL_ADDRESS, OPENAI_API_KEY
 from email_fetcher.email_utils import email_2_dict
 from email_fetcher.client import EmailClient
 import itertools
@@ -16,7 +16,7 @@ messages = email_client.get_email_content(message_IDs)
 email_messages = email_2_dict(messages)
 
 # Create an LLM connection to the LLM service (e.g., OpenAI)
-# llm_connection = connect_to_llm_service(api_key="your_api_key")
+llm_connection = LLMservice(OPEN_API_KEY)
 
 # send email messages to the LLM service for classification
 # classified_emails = classify_emails(llm_connection, email_messages)
@@ -24,7 +24,6 @@ email_messages = email_2_dict(messages)
 # move the emails with message ID to inbox with label provided by LLM
 # for classified_email in classified_emails:
 #     email_client.move_email(classified_email['message_id'], 'INBOX', classified_email['label'])
-
 
 
 # print messages from dictionary to test
