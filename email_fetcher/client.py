@@ -26,10 +26,13 @@ class EmailClient:
         throw error if connection fails with message
         """
         try:
+            # Create an IMAPClient instance with the host
             self.connection = IMAPClient(self.host)
+            # Login to the email server with the provided user and password
             self.connection.login(self.user, self.password)
             print(f"connected to email server {self.host}")
         except Exception as e:
+            # If there is an error while connecting, print the error message and set the connection to None
             print(f"failed to connect to email server {self.host} with error {e}")
             self.connection = None
 
@@ -129,7 +132,7 @@ if __name__ == '__main__':
     messages = email_client.get_email_content(message_IDs)
 
     # print out a few to test the connection using func from email_utils
-    email_test_print(messages, number = 20, lines = 80)
+    email_test_print(messages, number = 50, lines = None)
 
     # disconnect... bye bye
     email_client.disconnect()

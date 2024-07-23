@@ -113,3 +113,7 @@ dmypy.json
 
 # VS Code
 .vscode/
+.DS_Store
+
+#private data
+.test_emails/
