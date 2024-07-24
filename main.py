@@ -1,10 +1,9 @@
-from config.config import EMAIL_HOST, EMAIL_PASSWORD, EMAIL_USER, EMAIL_ADDRESS, OPENAI_API_KEY
-from email_fetcher.email_utils import email_2_dict
+import pprint
+import json
+from config.config import EMAIL_HOST, EMAIL_PASSWORD, EMAIL_USER, EMAIL_ADDRESS, OPENAI_API_KEY, ELEVENLABS_API_KEY
 from email_fetcher.client import EmailClient
 from LLM.LLM import LLMService
-import pprint
-import itertools
-import json
+from voice.voice import VoiceService
 
 # ======= GET THE EMAILS =========
 
@@ -21,7 +20,7 @@ messages = email_client.get_email_content(message_IDs)
 email_messages = email_2_dict(messages)
 
 # Concatenate all the email content into a single string for classification
-email_doc = json.dumps(email_messages)
+all_email_content = json.dumps(email_messages)
 # ====== FIRE UP THE LLM ========
 
 # Create an LLM connection to the LLM service (e.g., OpenAI)
@@ -89,14 +88,13 @@ Pull out the most interesting points, quotes, or stories, and keep the summary t
 }
 """
 # send email messages to the LLM service for classification
-result = llm.get_response_with_context_json(classification_prompt, email_doc)
+result = llm.get_response_with_context_json(classification_prompt, all_email_content)
 results_json = json.loads(result)
 pprint.pprint(results_json)
-classification = results_json["Classified_Emails"]
-newsletter_summary = results_json['newsletter_summary']['summary']
-personal_summary = results_json['personalEmailsSummary']['summary']
 
 # ======= MOVE THE EMAILS TO THE RIGHT FOLDERS ========
+
+classification = results_json["Classified_Emails"]
 
 try:
     for email_id in classification["Newsletters"]:
@@ -116,3 +114,22 @@ except Exception as e:
 
 # disconnect email server... bye bye
 email_client.disconnect()
+
+# ======= SPEAK SUMMARY OF PERSONAL AND NEWSLETTERS ========
+
+newsletter_summary_bits = results_json['newsletterSummary']['summary']
+personal_summary_bits = results_json['personalEmailsSummary']['summary']
+
+personal_summary = " ".join(personal_summary_bits)
+newsletter_summary = " ".join(newsletter_summary_bits)
+
+voice = VoiceService(ELEVENLABS_API_KEY)
+
+voice.set_voice("JBFqnCBsd6RMkjVDRZzb")
+
+personal_audio = voice.generate_audio(personal_summary)
+voice.play_audio(personal_audio)
+
+
+newsletter_audio = voice.generate_audio(newsletter_summary)
+voice.play_audio(newsletter_audio)
