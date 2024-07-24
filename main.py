@@ -2,6 +2,7 @@ import pprint
 import json
 from config.config import EMAIL_HOST, EMAIL_PASSWORD, EMAIL_USER, EMAIL_ADDRESS, OPENAI_API_KEY, ELEVENLABS_API_KEY
 from email_fetcher.client import EmailClient
+from email_fetcher.email_utils import email_2_dict
 from LLM.LLM import LLMService
 from voice.voice import VoiceService
 
@@ -127,9 +128,16 @@ voice = VoiceService(ELEVENLABS_API_KEY)
 
 voice.set_voice("JBFqnCBsd6RMkjVDRZzb")
 
-personal_audio = voice.generate_audio(personal_summary)
-voice.play_audio(personal_audio)
+if personal_summary is not None:
+    personal_audio = voice.generate_audio(personal_summary)
+    voice.play_audio(personal_audio)
+else:
+    no_updates = voice.generate_audio("There are no personal email updates at this time")
+    voice.play_audio(no_updates)
 
-
-newsletter_audio = voice.generate_audio(newsletter_summary)
-voice.play_audio(newsletter_audio)
+if newsletter_summary is not None:
+    newsletter_audio = voice.generate_audio(newsletter_summary)
+    voice.play_audio(newsletter_audio)
+else:
+    no_updates = voice.generate_audio("There are no newsletter updates at this time")
+    voice.play_audio(no_updates)
