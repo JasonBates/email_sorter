@@ -69,7 +69,7 @@ def email_2_dict(messages):
     for msg_id, data in messages.items():
         # get the subject and from field from the ENVELOPE
         envelope = data[b'ENVELOPE']
-        date_received = envelope.date if envelope.date else ''
+        date_received = envelope.date if envelope.date else None
         from_field = f"{envelope.sender[0]}" if envelope.sender else ''
         # decode tricky subject line with encoding of text and emojis into tuples?!?!
         subject = decode_rfc2047(envelope.subject)
@@ -111,7 +111,7 @@ def email_2_dict(messages):
         email_dict[msg_id] = {
             'subject': subject,
             'from': from_field,
-            'date': date_received.strftime('%Y-%m-%d %H:%M:%S'),
+            'date': date_received.strftime('%Y-%m-%d %H:%M:%S') if date_received else ' ',
             'body': body_text
         }
 
