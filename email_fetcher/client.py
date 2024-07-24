@@ -98,11 +98,20 @@ class EmailClient:
             print(f"failed to get email content from email server {self.host} with error {e}")
             return []
 
-    def process_emails(self, emails):
+    def move_emails(self, messages, target_folder):
         """
-        Process the list of email objects and extract text/HTML content.
+        Move specified messages to the target folder.
         """
-        return emails
+        self._ensure_connection()
+        try:
+            if self.connection:
+                self.connection.move(messages, target_folder)
+                print(f"successfully moved messages to {target_folder}")
+            else:
+                print(f"There is no connection to {self.host} to move messages to {target_folder}")
+        except Exception as e:
+            print(f"failed to move messages to folder {target_folder} from email server {self.host} with error {e}")
+            
 
     def disconnect(self):
         """

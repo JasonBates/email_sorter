@@ -12,8 +12,6 @@ client = ElevenLabs(
 # response = client.voices.get_all()
 # for voice_pick in response.voices:
 #     print(voice_pick.name)
-#     print('=='*50)
-
 # print(len(response.voices))
 
 
@@ -25,20 +23,28 @@ client = ElevenLabs(
 # play(audio)
 
 
-audio = client.generate(
-     text=f"Good morning Jason, today we're going to go through your emails and see what's happened in the world.",
-    voice='vlEySMCLRrxQ1iLkJQsm',
-    model="eleven_multilingual_v2"
-)
-play(audio)
+# audio = client.generate(
+#      text="Good morning Jason... what can I do for you today?",
+#     voice='vlEySMCLRrxQ1iLkJQsm',
+#     model="eleven_multilingual_v2"
+# )
+# play(audio)
 
 
-# for voice in islice(response.voices, 14, 20):
+# for voice in islice(response.voices, 22):
 #     audio_stream = client.generate(
-#         text=f"Hi I'm {voice.name}, I'm {voice.labels['age']}, and {voice.labels['accent']} ",
+#         text=f"Hi I'm {voice.name}, I'm {voice.labels['age']}, and {voice.labels['accent']}.... what do you think? ",
 #         voice=voice,
 #         model="eleven_multilingual_v2",
 #         stream=True
 #     )
 #     stream(audio_stream)
 
+
+audio_stream = client.generate(
+        text=f"Good morning! It's time to look at your emails for the day... starting out with personal requests, you have a lunch appointment with Charlie that you have to get back to him on, and a dinner reservation tonight at 8pm that you have to confirm ",
+        voice='JBFqnCBsd6RMkjVDRZzb', # george
+        model="eleven_multilingual_v2",
+        stream=True
+    )
+stream(audio_stream)
