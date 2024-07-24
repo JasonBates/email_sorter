@@ -43,7 +43,7 @@ Pull out the most interesting points, quotes, or stories, and keep the summary t
 
 - keep the responses to each of the three challenges separate
 - Follow my instructions above
-- respond in JSON with something like below:
+- respond in JSON with something like the example below:
 
 {'Classified_Emails': {'Adverts': ['539304', '540142', '540247'],
                       'Newsletters': ['540073',

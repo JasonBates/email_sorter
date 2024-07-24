@@ -36,7 +36,7 @@ with open('LLM/prompt.md', 'r') as file:
     classification_prompt = file.read()
     
 # send email messages to the LLM service for classification
-result = llm.get_response_with_context_json(
+result = llm.get_json_response_with_context(
     classification_prompt,
     all_email_content)
 
