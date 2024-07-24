@@ -111,7 +111,24 @@ class EmailClient:
                 print(f"There is no connection to {self.host} to move messages to {target_folder}")
         except Exception as e:
             print(f"failed to move messages to folder {target_folder} from email server {self.host} with error {e}")
-            
+
+
+    def file_away(self, classification):
+        try:
+            for email_id in classification["Newsletters"]:
+                self.move_emails(email_id, "INBOX.Newsletters")
+                print(f'Moved email {email_id} to Newsletters')
+            for email_id in classification["Personal"]:
+                self.move_emails(email_id, "INBOX.Personal")
+                print(f'Moved email {email_id} to Personal')
+            for email_id in classification["Orders and Receipts"]:
+                self.move_emails(email_id, "INBOX.Receipts")
+                print(f'Moved email {email_id} to Orders and Receipts')
+            for email_id in classification["Adverts"]:
+                self.move_emails(email_id, "INBOX.Adverts")
+                print(f'Moved email {email_id} to Adverts')
+        except Exception as e:
+            print(f"The error is {e}")
 
     def disconnect(self):
         """
