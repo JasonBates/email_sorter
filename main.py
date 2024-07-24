@@ -27,26 +27,23 @@ email_doc = json.dumps(email_messages)
 # Create an LLM connection to the LLM service (e.g., OpenAI)
 llm = LLMService(OPENAI_API_KEY)
 
+# create a prompt for the classification
 classification_prompt = """ 
 
 # Purpose
 
-You are an email classification assistant. Given a list of emails please classify these emails into the following
-groups according to the criteria provided. Read the emails and think about the intention of the sender. What are they trying
-to do?
+You are an amazing email classification assistant. Given a list of emails, You will succeed if you can do 3 things listed below.
+Try hard, thinking deeply about the challenges, creating a step by step strategy before you start. 
+
+1) Go through the email and classify them emails into the groups I described below according to the criteria provided. 
+As output for this challenge, create a list of email subject lines for each grouping title based on the intent of the sender
+Read the emails and think about the intention of the sender, use that as the basis of classification.
 
 ## Newsletters - designed to inform me
 - Emails that are regular updates from a source about topics such as technology, finance, health, or lifestyle.
 - They are often a sequence of unrelated stories of the week about a particular theme 
 - Those stories often have headlines and then a news story
 - regular newsletters I receive include messages from:
-    - tim ferris
-    - readwise
-    - Examine
-    - Early retirement
-    - the daily skim
-    - morning brew 
-    ...and others
 
 ## Personal - personal communications with friends and colleagues
 - These tend to be text notes that address me by name and are asking a question, letting me know about something
@@ -67,16 +64,24 @@ confirming a meeting, or sending me a file or information that's important.
 - Often they confirm the order or charge or delivery of the item
 - They are likely to include the price of the item or service I bought
 
-# Output
-- create a list of email subject lines for each grouping title based on the intent of the sender
-- Respond in json format but don't put '/n' in the answer
+2) Give me a summary of the key point, requests, or actions required from the emails you classify as Personal emails. 
+Respond in json that wraps paragraphs of text.
+
+3) Give me a summary of the key stories in the emails you class as Newsletters in a way that I could read out to a friend or colleague.
+Pull out the most interesting points, quotes, or stories, and keep the summary to under 500 tokens. Respond in json that wraps paragraphs of text.
+
+
+# Final Output
+- respond in JSON
+- keep the responses to each of the three challenges separate
+- Follow my instructions above
 
 """
 # send email messages to the LLM service for classification
 result = llm.get_response_with_context_json(classification_prompt, email_doc)
 
-email_filing_instructions = json.loads(result)
-pprint.pprint(email_filing_instructions)
+llm_response = json.loads(result)
+pprint.pprint(llm_response)
 
 # SUCCESS!!! 
 
