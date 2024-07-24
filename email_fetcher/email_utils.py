@@ -15,8 +15,9 @@ import email
 from html import unescape
 from email.header import decode_header
 from email.parser import BytesParser
-import chardet
 from datetime import datetime
+import chardet
+
 
 def decode_rfc2047(byte_like_subject_line):
     """
