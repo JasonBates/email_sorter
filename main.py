@@ -120,24 +120,8 @@ email_client.disconnect()
 
 newsletter_summary_bits = results_json['newsletterSummary']['summary']
 personal_summary_bits = results_json['personalEmailsSummary']['summary']
-
-personal_summary = " ".join(personal_summary_bits)
-newsletter_summary = " ".join(newsletter_summary_bits)
+email_summary_script = " ".join(personal_summary_bits).join(newsletter_summary_bits)
 
 voice = VoiceService(ELEVENLABS_API_KEY)
-
 voice.set_voice("JBFqnCBsd6RMkjVDRZzb")
-
-if personal_summary is not None:
-    personal_audio = voice.generate_audio(personal_summary)
-    voice.play_audio(personal_audio)
-else:
-    no_updates = voice.generate_audio("There are no personal email updates at this time")
-    voice.play_audio(no_updates)
-
-if newsletter_summary is not None:
-    newsletter_audio = voice.generate_audio(newsletter_summary)
-    voice.play_audio(newsletter_audio)
-else:
-    no_updates = voice.generate_audio("There are no newsletter updates at this time")
-    voice.play_audio(no_updates)
+voice.stream_audio(voice.generate_audio_stream(email_summary_script))
