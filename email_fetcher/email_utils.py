@@ -18,7 +18,6 @@ from email.parser import BytesParser
 from datetime import datetime
 import chardet
 
-
 def decode_rfc2047(byte_like_subject_line):
     """
     Decode a Subject line encoded using RFC 2047.
