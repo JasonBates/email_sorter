@@ -2,8 +2,8 @@ import pprint
 import os
 import json
 from config.config import EMAIL_HOST, EMAIL_PASSWORD, EMAIL_USER, EMAIL_ADDRESS, OPENAI_API_KEY, ELEVENLABS_API_KEY
-from email_fetcher.client import EmailClient
-from email_fetcher.email_utils import email_2_dict
+from emailer.client import EmailClient
+from emailer.email_utils import email_2_dict
 from LLM.LLM import LLMService
 from voice.voice import VoiceService
 
@@ -45,13 +45,14 @@ pprint.pprint(results_json)
 
 # ======= MOVE THE EMAILS TO THE RIGHT FOLDERS ========
 
+# get the classification scheme out of the results and file_away the emails accordingly
 classification = results_json["Classified_Emails"]
 email_client.file_away(classification)
 
 # disconnect email server... bye bye
 email_client.disconnect()
 
-# ======= SPEAK SUMMARY OF PERSONAL AND NEWSLETTERS ========
+# ======= ANNOUNCE THE SUMMARY OF PERSONAL AND NEWSLETTERS ========
 
 newsletter_summary_bits = results_json['newsletterSummary']['summary']
 personal_summary_bits = results_json['personalEmailsSummary']['summary']

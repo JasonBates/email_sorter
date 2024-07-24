@@ -2,7 +2,6 @@
 Module to handle email client operations.
 """
 from imapclient import IMAPClient
-from  config.config import EMAIL_HOST, EMAIL_PASSWORD, EMAIL_USER, EMAIL_ADDRESS
 
 class EmailClient:
     """
