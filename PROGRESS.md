@@ -28,8 +28,24 @@
 
 13. DONE: Fixed py linting issues ... with # type: ignore which feels a bit dirty, but works. Look more into that
 
-======
+14. DONE: RELEASE 1.0
+    The application works
+        Goes to inbox
+        pulls email with metadata
+        extracts data and text
+        sends it to LLM as context with a prompt
+        Receives a 
+            summary of personal emails
+            summary of newsletters
+            JSON object of where to store emails in different folders
+        The application then files_away emails
+        and asks eleven_labs to read out the summaries
 
-TODO: rather than printing out the email messages, create and return a dictionary that contains the email. envelope details, message ID, message body, time / date, etc. .. and test that with messages called from main.py
+--------
 
-TODO: move the smart bit from printing the email to a separate function so that I can start on the LLM part of the codebase
+15. NEXT UP 
+
+        Improve SPAM detection
+        only retrieve and process emails that aren't flagged from inbox 
+        Leave personal emails in the inbox ... but flag them
+        Remove 
