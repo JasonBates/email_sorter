@@ -116,4 +116,4 @@ dmypy.json
 .DS_Store
 
 #private data
-.test_emails/
+.test_emails/config/.env
